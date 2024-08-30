@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import MainText from "../../components/Typography"
-import { BuildingSceneCard } from "../../components/Cards"
+import { BuildingSceneCard, RiverSideSceneCard, TheJungleSceneCard } from "../../components/Cards"
 
 const CrimeSceneSectionContainer = styled.div`
     padding: 0 35px;
@@ -11,6 +11,8 @@ const CrimeSceneSection = () => {
     <CrimeSceneSectionContainer>
         <MainText content="SELECT CRIME SCENE" textSize={24} />
         <BuildingSceneCard />
+        <RiverSideSceneCard />
+        <TheJungleSceneCard />
     </CrimeSceneSectionContainer>
   )
 }

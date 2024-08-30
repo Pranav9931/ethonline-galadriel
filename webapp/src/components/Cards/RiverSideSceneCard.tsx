@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material"
 import { SceneCardContainer, SceneCardContent, SceneImage } from "./CardContainer"
 import MainText from "../Typography"
-import { Scene1 } from "../../assets"
+import { Scene2 } from "../../assets"
 
-const BuildingSceneCard = () => {
+const RiverSideSceneCard = () => {
   return (
     <SceneCardContainer>
         <SceneCardContent>
@@ -17,7 +17,7 @@ const BuildingSceneCard = () => {
                     alignSelf: 'flex-start'
                 }}
             >
-                <MainText textSize={64} content="THE BUILDING" />
+                <MainText textSize={64} content="RIVER SIDE" />
                 <Typography sx={{
                     fontSize: '16px',
                     color: '#ffffff60'
@@ -40,10 +40,10 @@ const BuildingSceneCard = () => {
                     EXPAND
                 </Typography>                
             </Box>
-            <SceneImage src={Scene1} />
+            <SceneImage src={Scene2} />
         </SceneCardContent>
     </SceneCardContainer>
   )
 }
 
-export default BuildingSceneCard
+export default RiverSideSceneCard
