@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { GridBackground } from "../../assets"
 import { Button } from "@mui/material"
 import { HeroButtonText } from "../../components/navbar"
+import CrimeSceneSection from "./CrimeSceneSection"
 
 const HomepageContainer = styled.div`
     background: url(${GridBackground}), #1a1a1a;
@@ -17,11 +18,10 @@ const HomepageContainer = styled.div`
 const HomeContent = styled.div`
     font-family: var(--main-font);
     text-align: center;
-    font-size: 4em;
-    max-width: 800px;
+    font-size: 5em;
+    max-width: 900px;
     margin-top: -150px;
     padding: 0 35px;
-
     @media screen and (max-width: 650px) {
         font-size: 3em;
     }
@@ -29,6 +29,7 @@ const HomeContent = styled.div`
 
 const Homepage = () => {
   return (
+    <>
     <HomepageContainer>
         <HomeContent>
             SIMULATE<span style={{color: '#ff4242'}}> CRIME </span>SCENES WITH <span style={{color: '#8103FF'}}> AI </span> DRIVEN <span style={{color: '#FE9983'}}> SCENARIOS </span>
@@ -50,7 +51,14 @@ const Homepage = () => {
            <span style={HeroButtonText}>GET STARTED</span>
         </Button>
         </HomeContent>
+
+        
+
     </HomepageContainer>
+
+    {/* Select Scene */}
+    <CrimeSceneSection />
+    </>
   )
 }
 
