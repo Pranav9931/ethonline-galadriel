@@ -1,8 +1,15 @@
-import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Navbar } from './components'
+import { Homepage } from './pages'
 
 const App = () => {
   return (
-    <div><span style={{fontFamily: 'var(--main-font)'}}>App</span></div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+    </>
   )
 }
 
