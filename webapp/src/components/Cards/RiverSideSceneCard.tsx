@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material"
-import { SceneCardContainer, SceneCardContent, SceneImage } from "./CardContainer"
+import { ImageWrapper, SceneCardContainer, SceneCardContent, SceneImage } from "./CardContainer"
 import MainText from "../Typography"
 import { Scene2 } from "../../assets"
 
@@ -23,7 +23,7 @@ const RiverSideSceneCard = () => {
                     color: '#ffffff60'
                 }}
                 >
-                    With over 60% of crimes occurring in apartments and buildings, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.
+                    With over 30% of crimes occurring on the river side, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.
                 </Typography>
 
 
@@ -31,7 +31,7 @@ const RiverSideSceneCard = () => {
                     fontSize: '12px',
                     fontWeight: 700,
                     color: '#ffffff',
-                    height: '90px',
+                    height: '40px',
                     display: 'flex',
                     alignItems: 'flex-end',
                     cursor: 'pointer'
@@ -40,7 +40,10 @@ const RiverSideSceneCard = () => {
                     EXPAND
                 </Typography>                
             </Box>
-            <SceneImage src={Scene2} />
+            <ImageWrapper>
+                <SceneImage src={Scene2} />
+            </ImageWrapper>
+            
         </SceneCardContent>
     </SceneCardContainer>
   )
