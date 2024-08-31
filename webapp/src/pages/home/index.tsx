@@ -4,6 +4,7 @@ import { Button } from "@mui/material"
 import { HeroButtonText } from "../../components/navbar"
 import CrimeSceneSection from "./CrimeSceneSection"
 import EvidenceSection from "./EvidenceSection"
+import CharacterSection from "./CharacterSection"
 
 const HomepageContainer = styled.div`
     background: url(${GridBackground}), #1a1a1a;
@@ -62,6 +63,9 @@ const Homepage = () => {
 
     {/* Select Evidences */}
     <EvidenceSection />
+
+    {/* Characters */}
+    <CharacterSection />
     </>
   )
 }

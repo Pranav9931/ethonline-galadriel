@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
+import { StateContextProvider } from './context/index.tsx'
 
 const projectId = import.meta.env.VITE_WALLET_PROJECT_ID
 
@@ -46,7 +47,9 @@ createWeb3Modal({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router>
-      <App />
+      <StateContextProvider>
+        <App />
+      </StateContextProvider>
     </Router>
   </StrictMode>,
 )

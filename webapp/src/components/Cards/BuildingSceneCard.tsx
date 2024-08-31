@@ -2,10 +2,36 @@ import { Box, Typography } from "@mui/material"
 import { ImageWrapper, SceneCardContainer, SceneCardContent, SceneImage } from "./CardContainer"
 import MainText from "../Typography"
 import { Scene1 } from "../../assets"
+import { useStateContext } from "../../context"
 
 const BuildingSceneCard = () => {
+
+    const {crimeScene, setCrimeScene} = useStateContext();
+
+    const handleSceneSet = (sceneNumber: number) => {
+        if (!crimeScene) {
+            setCrimeScene(() => ({
+                id: sceneNumber,
+                title: 'THE BUILDING',
+                desc: 'With over 60% of crimes occurring in apartments and buildings, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
+                imgUrl: Scene1
+            }))
+        } else if (crimeScene && crimeScene.id === sceneNumber) {
+            setCrimeScene(null)
+        } else {
+            setCrimeScene(() => ({
+                id: sceneNumber,
+                title: 'THE BUILDING',
+                desc: 'With over 60% of crimes occurring in apartments and buildings, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
+                imgUrl: Scene1
+            }))
+        }
+    }
   return (
-    <SceneCardContainer>
+    <SceneCardContainer
+        onClick={() => handleSceneSet(1)}
+        style={{border: `${crimeScene && crimeScene.id === 1 ? '2px solid #0000FF' : 'none'}`}}
+    >
         <SceneCardContent>
             <Box
                 sx={{
