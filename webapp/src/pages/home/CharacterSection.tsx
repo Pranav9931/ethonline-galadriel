@@ -2,7 +2,7 @@ import styled from "styled-components"
 import MainText from "../../components/Typography"
 import { CharacterCard } from "../../components/Cards"
 import { Character1, Character2, Character3 } from "../../assets"
-import { Box } from "@mui/material"
+import { Box, Button } from "@mui/material"
 
 const CharacterSectionContainer = styled.div`
     padding: 0 35px;
@@ -23,6 +23,8 @@ const CharacterSection = () => {
             <CharacterCard id={2} name={"TANIYA"} imgUrl={Character2} complexion="FAIR" crimeRecords="LOW" onBail={false} noOfCrimes={1} />
             <CharacterCard id={3} name={"AMYLIE"} imgUrl={Character3} complexion="FAIR" crimeRecords="MODERATE" onBail={true} noOfCrimes={4} />
         </Box>
+        <br />
+        <Button fullWidth>CREATE YOUR OWN CHARACTER</Button>
     </CharacterSectionContainer>
   )
 }
