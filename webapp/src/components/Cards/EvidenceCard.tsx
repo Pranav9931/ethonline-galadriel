@@ -71,7 +71,7 @@ const EvidenceCard = ({evidenceId, name, dangerType, imgUrl}: EvidenceType) => {
     >
         <EvidenceImage src={imgUrl} />
         <span style={{fontFamily: 'var(--main-font)', fontSize: '20px', letterSpacing: '1px'}}>{name}</span>
-        <span style={{transform: 'skew(15deg)', fontSize: '12px'}}>Danger Level: {dangerType}</span>
+        <span style={{transform: 'skew(5deg)', fontSize: '12px'}}>DANGER LEVEL: {dangerType}</span>
     </EvidenceCardContainer>
   )
 }

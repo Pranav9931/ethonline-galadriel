@@ -56,6 +56,7 @@ export const CharacterCardContainer = styled.div`
   box-sizing: border-box;
   transform: skew(-5deg);
   cursor: pointer;
+  margin-top: 10px;
 `
 
 export const CharacterCardContent = styled.div`
