@@ -5,7 +5,7 @@ import { Homepage } from './pages'
 import { useStateContext } from './context'
 import styled from 'styled-components'
 import MainText from './components/Typography'
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 
 const Floater = styled.div`
   position: fixed;
@@ -19,6 +19,8 @@ const Floater = styled.div`
   border-radius: 10px;
   padding: 10px;
   z-index: 99999;
+  max-height: 900px;
+  overflow: auto;
 
 `
 
@@ -153,6 +155,19 @@ const App = () => {
             
           </CharacterWrapper>
           }
+
+          <Button
+          fullWidth
+            sx={{
+              height: 40,
+              background: '#FFFFFF',
+              color: '#000000',
+              margin: '10px 0 0 0',
+              borderRadius: '10px',
+            }}
+          >
+            CREATE STORY
+          </Button>
         </Floater>
       )
     }

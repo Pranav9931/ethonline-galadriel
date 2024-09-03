@@ -70,6 +70,8 @@ const BuildingSceneCard = () => {
                 <SceneImage src={Scene1} />
             </ImageWrapper>
         </SceneCardContent>
+
+        
     </SceneCardContainer>
   )
 }
