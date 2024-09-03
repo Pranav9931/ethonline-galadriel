@@ -34,6 +34,8 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
     const [evidence, setEvidence] = useState<Evidence | null>(null)
     const [character, setCharacter] = useState<Character | null>(null)
 
+    const [finalPrompt, setFinalPrompt] = useState<string | null>(null)
+
     return (
         <StateContext.Provider value={
             {
@@ -43,7 +45,9 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
                 evidence,
                 setEvidence,
                 character,
-                setCharacter
+                setCharacter,
+                finalPrompt,
+                setFinalPrompt
             }
         }>
             {children}

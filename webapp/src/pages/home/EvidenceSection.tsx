@@ -38,22 +38,6 @@ const EvidenceBody = styled.div`
   height: 100%;
 `
 
-const CrimeSceneImagePlaceholder = styled.div`
-  display: flex;
-  background: #000000;
-  min-height: 550px;
-  border-radius: 10px;
-  padding: 20px;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
-  // background-position: center center;
-  background-size: 50%;
-  position: relative;
-`
-
-
-
 
 const EvidenceSection = () => {
 

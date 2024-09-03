@@ -18,7 +18,7 @@ const Floater = styled.div`
   background: #2B2B2B;
   border-radius: 10px;
   padding: 10px;
-  z-index: 99999;
+  z-index: 999;
   max-height: 900px;
   overflow: auto;
 
@@ -75,7 +75,26 @@ const CharacterImage = styled.img`
 
 const App = () => {
 
-  const {crimeScene, evidence, character} = useStateContext();
+  const {crimeScene, evidence, character, finalPrompt, setFinalPrompt} = useStateContext();
+
+  const handleFinalSubmit = () => {
+    if (crimeScene && (evidence || character)){
+      let story: string = `CREATE A PLOT / STORY WITH CHARACTERIZATION, CRIME SCENE DETAILS ARE AS FOLLOWS: PLACE [${crimeScene.title.toUpperCase()}] DESCRIPTION [${crimeScene.desc.toUpperCase()}].`
+      if(evidence && evidence.length > 0) {
+        const evidenceDesc: string = `FOUND EVIDENCES AT THE SCENE IS/ARE:${evidence.map((item: any) => (` [${item.name.toUpperCase()}]`))}`
+        story = story + " " + evidenceDesc + ".";
+      }
+      if (character) {
+        const characterDesc: string = `CHARACTER OF THE STORY SHOULD BE AS FOLLOWS: NAME [${character.name.toUpperCase()}] COMPLEXION [${character.complexion?.toUpperCase()}] CRIME RECORDS [${character.crimeRecords?.toUpperCase()}] CASES [${character.noOfCrimes}] JUDICIAL BAIL STATUS [${String(character.onBail).toUpperCase()}]`
+        story = story + " " + characterDesc + "."
+      }
+
+      console.log(story)
+      setFinalPrompt(story)
+    }
+  }
+
+
 
   const getFloater = () => {
     if (crimeScene || evidence || character) {
@@ -165,6 +184,8 @@ const App = () => {
               margin: '10px 0 0 0',
               borderRadius: '10px',
             }}
+
+            onClick={() => handleFinalSubmit()}
           >
             CREATE STORY
           </Button>

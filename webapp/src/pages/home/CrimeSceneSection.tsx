@@ -133,6 +133,7 @@ const CrimeSceneSection = () => {
     <CrimeSceneSectionContainer>
         <MainText content="SELECT CRIME SCENE" textSize={24} />
         <BuildingSceneCard />
+        <Typography sx={{margin: '15px 0 0 0', fontFamily: 'Inter, sans-serif', fontSize: '12px', fontWeight: 600}}>COMING SOON (WILL BE UNLOCKED IN LATER STAGES)</Typography>
         <RiverSideSceneCard />
         <TheJungleSceneCard />
         <br />
