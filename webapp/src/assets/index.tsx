@@ -1,4 +1,5 @@
 import GridBackground from "./grid_background.svg"
+import SuccessImg from "./done-sign.gif"
 import UserImage from "./01.avif"
 
 import Scene1 from "./scene-01.jpg"
@@ -17,6 +18,7 @@ import Character3 from "./character-03.jpg"
 
 export {
     GridBackground,
+    SuccessImg,
     UserImage,
     Scene1,
     Scene2,

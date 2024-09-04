@@ -1,6 +1,6 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { Navbar } from './components'
-import { Homepage } from './pages'
+import { Homepage, SuccessPage } from './pages'
 
 import { useStateContext } from './context'
 import styled from 'styled-components'
@@ -82,9 +82,11 @@ const CharacterImage = styled.img`
 
 const App = () => {
 
-  const {contract, crimeScene, evidence, character, finalPrompt, setFinalPrompt} = useStateContext();
+  const {contract, crimeScene, evidence, character, setCrimeScene, setEvidence, setCharacter, finalPrompt, setFinalPrompt} = useStateContext();
 
   const [scroll, setScroll] = React.useState<DialogProps['scroll']>('paper');
+
+  const navigate = useNavigate();
 
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -163,6 +165,7 @@ const App = () => {
     }
 
     try {
+      setIsLoading(true);
       const convaiAPIKey: string = import.meta.env.VITE_CONVAI_API_KEY;
       if (!convaiAPIKey) {
         window.alert("MISSING CONVAI API KEY")
@@ -184,12 +187,25 @@ const App = () => {
         body: JSON.stringify(body)
       });
       
+      const result = await data.json();
+      if (result.STATUS === 'SUCCESS'){
 
-      const result = await data.json()
-      console.log(result);
+        setCrimeScene(null);
+        setCharacter(null);
+        setEvidence(null);
+
+        setIsLoading(false);
+        setRes("")
+        setOpen(false);
+        setDialogOpen(false);
+
+        const promise = new Promise(resolve => setTimeout(resolve, 2000))
+        navigate("../success")
+      }
 
     } catch (err: any) {
-      console.error(err)
+      console.error(err);
+      setIsLoading(false);
     }
   }
 
@@ -387,6 +403,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/success" element={<SuccessPage />} />
       </Routes>
     </>
   )
