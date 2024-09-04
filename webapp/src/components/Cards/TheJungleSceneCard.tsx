@@ -7,29 +7,10 @@ import { useStateContext } from "../../context"
 const TheJungleSceneCard = () => {
 
     const {crimeScene, setCrimeScene} = useStateContext();
-    const handleSceneSet = (sceneNumber: number) => {
-        if (!crimeScene) {
-            setCrimeScene(() => ({
-                id: sceneNumber,
-                title: 'THE JUNGLE',
-                desc: 'With over 10% of crimes occurring in jungles, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
-                imgUrl: Scene3
-            }))
-        } else if (crimeScene && crimeScene.id === sceneNumber) {
-            setCrimeScene(null)
-        } else {
-            setCrimeScene(() => ({
-                id: sceneNumber,
-                title: 'THE JUNGLE',
-                desc: 'With over 10% of crimes occurring in jungles, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
-                imgUrl: Scene3
-            }))
-        }
-    }
   return (
     <SceneCardContainer
-        onClick={() => handleSceneSet(3)}
-        style={{border: `${crimeScene && crimeScene.id === 3 ? '2px solid #0000FF' : 'none'}`}}
+        // onClick={() => handleSceneSet(3)}
+        style={{border: `${crimeScene && crimeScene.id === 3 ? '2px solid #0000FF' : 'none'}`, filter: 'grayscale(100)', opacity: 0.5}}
     >
         <SceneCardContent>
             <Box

@@ -2,14 +2,14 @@ import { createContext, ReactNode, useContext, useState } from "react";
 
 const StateContext = createContext({} as any);
 
-type CrimeScene = {
+export type CrimeScene = {
     id: number,
     title: string,
     desc: string,
     imgUrl: string
 }
 
-type Evidence = {
+export type Evidence = {
     evidenceId: number,
     name: string,
     dangerType: string,
@@ -29,10 +29,12 @@ export type Character = {
 export const StateContextProvider = ({ children }: { children: ReactNode }) => {
     // state logic here
 
-    const contract: string = '';
+    const contract: string = '0x6AE6a42aBBbBA0caBF9Cb9a1410E16D177c83ccE';
     const [crimeScene, setCrimeScene] = useState<CrimeScene|null>(null)
     const [evidence, setEvidence] = useState<Evidence | null>(null)
     const [character, setCharacter] = useState<Character | null>(null)
+
+    const [finalPrompt, setFinalPrompt] = useState<string | null>(null)
 
     return (
         <StateContext.Provider value={
@@ -43,7 +45,9 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
                 evidence,
                 setEvidence,
                 character,
-                setCharacter
+                setCharacter,
+                finalPrompt,
+                setFinalPrompt
             }
         }>
             {children}
