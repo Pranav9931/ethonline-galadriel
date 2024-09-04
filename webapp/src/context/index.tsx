@@ -29,7 +29,7 @@ export type Character = {
 export const StateContextProvider = ({ children }: { children: ReactNode }) => {
     // state logic here
 
-    const contract: string = '0x64408810AE13271A409e4Fd3510Db9130d5dfe6f';
+    const contract: string = '0x6AE6a42aBBbBA0caBF9Cb9a1410E16D177c83ccE';
     const [crimeScene, setCrimeScene] = useState<CrimeScene|null>(null)
     const [evidence, setEvidence] = useState<Evidence | null>(null)
     const [character, setCharacter] = useState<Character | null>(null)

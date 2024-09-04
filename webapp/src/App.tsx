@@ -5,7 +5,14 @@ import { Homepage } from './pages'
 import { useStateContext } from './context'
 import styled from 'styled-components'
 import MainText from './components/Typography'
-import { Box, Button } from '@mui/material'
+import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Typography } from '@mui/material'
+
+import contractABI from "./contracts/abi/index.json"
+import { BrowserProvider, recoverAddress } from 'ethers'
+import { Contract } from 'ethers'
+import React, { useEffect, useState } from 'react'
+import { useWeb3ModalProvider } from '@web3modal/ethers/react'
+import { handleConvaiAPICall } from './apis'
 
 const Floater = styled.div`
   position: fixed;
@@ -75,26 +82,116 @@ const CharacterImage = styled.img`
 
 const App = () => {
 
-  const {crimeScene, evidence, character, finalPrompt, setFinalPrompt} = useStateContext();
+  const {contract, crimeScene, evidence, character, finalPrompt, setFinalPrompt} = useStateContext();
 
-  const handleFinalSubmit = () => {
-    if (crimeScene && (evidence || character)){
-      let story: string = `CREATE A PLOT / STORY WITH CHARACTERIZATION, CRIME SCENE DETAILS ARE AS FOLLOWS: PLACE [${crimeScene.title.toUpperCase()}] DESCRIPTION [${crimeScene.desc.toUpperCase()}].`
-      if(evidence && evidence.length > 0) {
-        const evidenceDesc: string = `FOUND EVIDENCES AT THE SCENE IS/ARE:${evidence.map((item: any) => (` [${item.name.toUpperCase()}]`))}`
-        story = story + " " + evidenceDesc + ".";
-      }
-      if (character) {
-        const characterDesc: string = `CHARACTER OF THE STORY SHOULD BE AS FOLLOWS: NAME [${character.name.toUpperCase()}] COMPLEXION [${character.complexion?.toUpperCase()}] CRIME RECORDS [${character.crimeRecords?.toUpperCase()}] CASES [${character.noOfCrimes}] JUDICIAL BAIL STATUS [${String(character.onBail).toUpperCase()}]`
-        story = story + " " + characterDesc + "."
-      }
+  const [scroll, setScroll] = React.useState<DialogProps['scroll']>('paper');
 
-      console.log(story)
-      setFinalPrompt(story)
+  const { walletProvider } = useWeb3ModalProvider();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [hash, setHash] = React.useState("");
+  const [res, setRes] = React.useState<string>(``);
+
+  const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleFinalSubmit = async () => {
+    setIsLoading(true);
+    setOpen(true);
+    setDialogOpen(false);
+    try {
+      if (crimeScene && (evidence || character)){
+        let story: string = `CREATE A PLOT / STORY WITH CHARACTERIZATION, CRIME SCENE DETAILS ARE AS FOLLOWS: PLACE [${crimeScene.title.toUpperCase()}] DESCRIPTION [${crimeScene.desc.toUpperCase()}].`
+        if(evidence && evidence.length > 0) {
+          const evidenceDesc: string = `FOUND EVIDENCES AT THE SCENE IS/ARE:${evidence.map((item: any) => (` [${item.name.toUpperCase()}]`))}`
+          story = story + " " + evidenceDesc + ".";
+        }
+        if (character) {
+          const characterDesc: string = `CHARACTER OF THE STORY SHOULD BE AS FOLLOWS: NAME [${character.name.toUpperCase()}] COMPLEXION [${character.complexion?.toUpperCase()}] CRIME RECORDS [${character.crimeRecords?.toUpperCase()}] CASES [${character.noOfCrimes}] JUDICIAL BAIL STATUS [${String(character.onBail).toUpperCase()}]`
+          story = story + " " + characterDesc + "."
+        }
+  
+        console.log(story)
+        setFinalPrompt(story)
+  
+        const ethersProvider = new BrowserProvider(walletProvider as any);
+        const signer = await ethersProvider.getSigner()
+    
+        const contractInstance = new Contract(contract, contractABI, signer)
+        const result = await contractInstance.sendMessage(story);
+        console.log(result.hash)
+        setHash(result.hash)
+    
+        while(true) {
+          const response = await contractInstance.response()
+          if (response) {
+              console.log(response);
+              setRes(`${response}`)
+              break;
+          }
+          await new Promise(resolve => setTimeout(resolve, 2000))
+        }
+      }
+      setIsLoading(false);
+      setOpen(false);
+
+    } catch (err: any) {
+      console.error(err)
+      setIsLoading(false);
+      setOpen(false);
     }
+    
+  }
+
+  const handleClose = () => {
+    setDialogOpen(false);
   }
 
 
+
+  useEffect(() => {
+    setDialogOpen(true);
+  }, [res])
+
+
+  const handleConvaiAPICall = async () => {
+    const baseUri: string = import.meta.env.VITE_CONVAI_BASE_URI;
+    if (!baseUri){
+      window.alert("MISSING BASE URI FOR CONVAI");
+      return;
+    }
+
+    try {
+      const convaiAPIKey: string = import.meta.env.VITE_CONVAI_API_KEY;
+      if (!convaiAPIKey) {
+        window.alert("MISSING CONVAI API KEY")
+        return;
+      }
+      const body: {charName: string, backstory: string, charID: string} = {
+        charName: character.name,
+        backstory: res,
+        charID: "5d586362-6a7f-11ee-9464-42010a40000b"
+      } 
+
+
+      const data = await fetch(`${baseUri}/character/update`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "CONVAI-API-KEY": String(convaiAPIKey)
+        },
+        body: JSON.stringify(body)
+      });
+      
+
+      const result = await data.json()
+      console.log(result);
+
+    } catch (err: any) {
+      console.error(err)
+    }
+  }
 
   const getFloater = () => {
     if (crimeScene || evidence || character) {
@@ -176,7 +273,7 @@ const App = () => {
           }
 
           <Button
-          fullWidth
+            fullWidth
             sx={{
               height: 40,
               background: '#FFFFFF',
@@ -199,6 +296,93 @@ const App = () => {
       <Navbar />
 
       {getFloater()}
+      {isLoading && <>
+        <Backdrop
+          sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </>
+      }
+
+      {!isLoading && res.length > 0 &&
+        <>
+          <React.Fragment>
+            <Dialog
+              open={dialogOpen}
+              scroll={scroll}
+              aria-labelledby="scroll-dialog-title"
+              aria-describedby="scroll-dialog-description"
+            >
+              <DialogTitle id="scroll-dialog-title" sx={{background: '#171717', color: '#FFFFFF'}} >YOUR STORY BOARD</DialogTitle>
+              <DialogContent dividers={scroll === 'paper'} sx={{whiteSpace: 'pre-wrap', background: '#1A1A1A', color: '#FFFFFF'}}>
+                <Box sx={{background: '#000000', padding: '10px', borderRadius: '10px', marginBottom: '10px'}}>
+                  <img src={crimeScene.imgUrl} style={{width: '100%', height: '250px', objectFit: 'cover', borderRadius: '5px'}} />
+                  <Box>
+                    <MainText textSize={12} content="SCENE NAME" />
+                    <Typography sx={{fontFamily: 'Inter, sans-serif'}}>{crimeScene.title}</Typography>
+                  </Box>
+                </Box>
+
+                <Box sx={{marginBottom: '10px', display: 'flex', gap: '10px'}}>
+                  <Box sx={{background: '#000000', padding: '10px', borderRadius: '10px'}}>
+                    <img src={character.imgUrl} style={{height: '150px', width: '150px', objectFit: 'cover', borderRadius: '5px'}} />
+                    <Box>
+                      <MainText textSize={12} content="CHARACTER NAME" />
+                      <Typography sx={{fontFamily: 'Inter, sans-serif'}}>{character.name}</Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{background: '#000000', padding: '10px', borderRadius: '10px', flex: 1}}>
+                    <MainText textSize={12} content='EVIDENCES' />
+                    <Box sx={{ display: 'flex', gap: '5px', marginTop: '10px' }}>
+                    {evidence?.map((item: any) => {
+                      return (
+                        <>
+                        <Box sx={{
+                          maxWidth: '50px',
+                          background: '#1E1E1E',
+                          padding: '5px',
+                          borderRadius: '5px'
+                        }}>
+                          <img src={item.imgUrl} style={{height: '50px', width: '50px', objectFit: 'cover', borderRadius: '5px'}} />
+                        
+                          <Typography sx={{fontFamily: 'Inter, sans-serif', fontSize: '10px'}}>{item.name}</Typography>
+                        </Box>
+                        </>
+                      )
+                    })}
+                    </Box>
+                    
+                  </Box>
+                  
+                </Box>
+                  <Box
+                    sx={{
+                      background: '#000000',
+                      padding: '10px',
+                      borderRadius: '10px'
+                    }}
+                  >
+                    <center>
+                      <MainText textSize={24} content='PLOT' />
+                    </center>
+
+                    {res}
+
+                </Box>
+              </DialogContent>
+
+              <DialogActions sx={{background: '#171717', color: '#FFFFFF'}}>
+                <Button onClick={handleClose} sx={{background: '#ffffff', color: '#000000', fontWeight: 600}}>Cancel</Button>
+                <Button onClick={() => handleFinalSubmit()} sx={{background: '#ffffff', color: '#000000', fontWeight: 600}}>Retry</Button>
+                <Button onClick={() => handleConvaiAPICall()} sx={{background: '#ffffff', color: '#000000', fontWeight: 600}}>SUBMIT</Button>
+              </DialogActions>
+            </Dialog>
+            </React.Fragment>
+            </>
+      }
 
 
       <Routes>

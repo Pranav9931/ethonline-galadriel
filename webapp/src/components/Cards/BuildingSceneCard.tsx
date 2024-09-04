@@ -130,7 +130,7 @@ const BuildingSceneCard = () => {
             onClose={handleClose}
             TransitionComponent={Transition}
         >
-            <DialogTitle sx={{background: '#1E1E1E', color: '#ffffff', fontSize: '14px'}}>{"ADD SCENE DESCRIPTION"}</DialogTitle>
+            <DialogTitle sx={{background: '#1E1E1E', color: '#ffffff', fontSize: '14px'}}>{"PROCEDURAL BUILDING GENERATOR"}</DialogTitle>
             <CrimeSceneBody>
             <DialogContent>
                 <DialogBoxImage src={Scene1} />

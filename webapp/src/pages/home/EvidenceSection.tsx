@@ -42,7 +42,7 @@ const EvidenceBody = styled.div`
 const EvidenceSection = () => {
 
   const contractABI = [
-    "function initializeDalleCall(string memory message) public returns (uint)",
+    "function initialiseImageGeneration(string memory message) public returns (uint)",
     "function lastResponse() public view returns (string)"
   ];
 
@@ -64,28 +64,36 @@ const EvidenceSection = () => {
 
     if (evidencePrompt.length === 0) return;
     setIsLoading(true);
-    const ethersProvider = new BrowserProvider(walletProvider as any);
-    const signer = await ethersProvider.getSigner()
+    try {
+      const ethersProvider = new BrowserProvider(walletProvider as any);
+      const signer = await ethersProvider.getSigner()
 
-    const contractInstance = new Contract(contract, contractABI, signer)
-    const result = await contractInstance.initializeDalleCall(evidencePrompt);
+      const contractInstance = new Contract(contract, contractABI, signer)
+      const result = await contractInstance.initialiseImageGeneration(evidencePrompt);
 
-    setHash(result.hash)
+      setHash(result.hash)
 
-    let lastResponse = await contractInstance.lastResponse();
-    console.log(lastResponse)
-    let newResponse = lastResponse;
+      let lastResponse = await contractInstance.lastResponse();
+      console.log(lastResponse)
+      let newResponse = lastResponse;
 
-    while(newResponse === lastResponse) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      newResponse = await contractInstance.lastResponse();
-      console.log(".")
+      while(newResponse === lastResponse) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        newResponse = await contractInstance.lastResponse();
+        console.log(".")
+      }
+
+      console.log(newResponse)
+      setGeneratedEvidenceLink(newResponse);
+
+    } catch (err: any) {
+      console.log(err)
     }
+    
 
-    console.log(newResponse)
+
     setIsLoading(false)
     setIsSet(true)
-    setGeneratedEvidenceLink(newResponse);
   }
 
   const handleClickOpen = () => {

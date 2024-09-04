@@ -48,8 +48,8 @@ const CrimeSceneImagePlaceholder = styled.div`
 
 const CharacterSection = () => {
 
-    const contractABI = [
-        "function initializeDalleCall(string memory message) public returns (uint)",
+      const contractABI = [
+        "function initialiseImageGeneration(string memory message) public returns (uint)",
         "function lastResponse() public view returns (string)"
       ];
     
@@ -80,7 +80,7 @@ const CharacterSection = () => {
         const signer = await ethersProvider.getSigner()
     
         const contractInstance = new Contract(contract, contractABI, signer)
-        const result = await contractInstance.initializeDalleCall(characterPrompt);
+        const result = await contractInstance.initialiseImageGeneration(characterPrompt);
     
         setHash(result.hash)
     
@@ -109,7 +109,7 @@ const CharacterSection = () => {
       };
     
       const handleSceneSet = () => {
-        if (characterName.length > 0 && CharacterComplexion.length > 0 && generatedCharacterLink.length > 0 && characterCrimeRecords.length > 0 && characterCases) {
+        if (characterName.length > 0 && CharacterComplexion.length > 0 && generatedCharacterLink.length > 0 && characterCrimeRecords.length > 0 && characterCases >= 0) {
           const getId: number = Math.ceil(6 * Math.random());
           setCharacter((prev: Character) => ({
             id: getId,
