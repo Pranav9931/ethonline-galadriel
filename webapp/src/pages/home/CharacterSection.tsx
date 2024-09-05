@@ -50,7 +50,8 @@ const CharacterSection = () => {
 
       const contractABI = [
         "function initialiseImageGeneration(string memory message) public returns (uint)",
-        "function lastResponse() public view returns (string)"
+        "function lastResponse() public view returns (string)",
+        "function createCharacter(string memory _name, string memory _complexion, string memory _crimeRecordsDesc, uint256 _noOfCrimes, bool _onBail, string memory _imgUrl) public returns (bool)"
       ];
     
       const {contract, setCharacter} = useStateContext();
@@ -108,8 +109,23 @@ const CharacterSection = () => {
         setOpen(false);
       };
     
-      const handleSceneSet = () => {
+      const handleSceneSet = async () => {
         if (characterName.length > 0 && CharacterComplexion.length > 0 && generatedCharacterLink.length > 0 && characterCrimeRecords.length > 0 && characterCases >= 0) {
+
+          try {
+            const ethersProvider = new BrowserProvider(walletProvider as any);
+            const signer = await ethersProvider.getSigner()
+      
+            const contractInstance = new Contract(contract, contractABI, signer)
+            const result = await contractInstance.createCharacter(characterName, CharacterComplexion, characterCrimeRecords, characterCases, onBail, generatedCharacterLink);
+            console.log(result)
+      
+          } catch (err: any) {
+            console.log(err)
+            return;
+          }
+    
+
           const getId: number = Math.ceil(6 * Math.random());
           setCharacter((prev: Character) => ({
             id: getId,
@@ -147,9 +163,9 @@ const CharacterSection = () => {
                 flexWrap: 'wrap'
             }}
         >
-            <CharacterCard id={1} name={"BARAKA"} imgUrl={Character1} complexion="FAIR" crimeRecords="HEAVY" onBail={true} noOfCrimes={10} />
-            <CharacterCard id={2} name={"TANIYA"} imgUrl={Character2} complexion="FAIR" crimeRecords="LOW" onBail={false} noOfCrimes={1} />
-            <CharacterCard id={3} name={"AMYLIE"} imgUrl={Character3} complexion="FAIR" crimeRecords="MODERATE" onBail={true} noOfCrimes={4} />
+            <CharacterCard id={1} name={"AOI"} imgUrl={Character1} complexion="BROWN" crimeRecords="HEAVY" onBail={true} noOfCrimes={5} />
+            <CharacterCard id={2} name={"PIA"} imgUrl={Character2} complexion="FAIR" crimeRecords="LOW" onBail={false} noOfCrimes={1} />
+            <CharacterCard id={3} name={"MALIKA"} imgUrl={Character3} complexion="DARK" crimeRecords="MODERATE" onBail={true} noOfCrimes={7} />
         </Box>
         <br />
 

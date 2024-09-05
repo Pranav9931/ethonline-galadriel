@@ -43,7 +43,8 @@ const EvidenceSection = () => {
 
   const contractABI = [
     "function initialiseImageGeneration(string memory message) public returns (uint)",
-    "function lastResponse() public view returns (string)"
+    "function lastResponse() public view returns (string)",
+    "function createEvidence(string memory _name, string memory _dangerType, string memory _imgUrl) public returns (bool)"
   ];
 
   const {contract, evidence, setEvidence} = useStateContext();
@@ -69,7 +70,7 @@ const EvidenceSection = () => {
       const signer = await ethersProvider.getSigner()
 
       const contractInstance = new Contract(contract, contractABI, signer)
-      const result = await contractInstance.initialiseImageGeneration(evidencePrompt);
+      const result = await contractInstance.initialiseImageGeneration(`top down view of ` + evidencePrompt + ` solid black background`);
 
       setHash(result.hash)
 
@@ -104,8 +105,22 @@ const EvidenceSection = () => {
     setOpen(false);
   };
 
-  const handleEvidenceSet = () => {
+  const handleEvidenceSet = async () => {
     if (name.length > 0 && dangerType.length > 0 && generatedEvidenceLink.length > 0) {
+
+      try {
+        const ethersProvider = new BrowserProvider(walletProvider as any);
+        const signer = await ethersProvider.getSigner()
+  
+        const contractInstance = new Contract(contract, contractABI, signer)
+        const result = await contractInstance.createEvidence(name, dangerType, generatedEvidenceLink);
+        console.log(result)
+  
+      } catch (err: any) {
+        console.log(err)
+        return;
+      }
+
       const getId: number = Math.ceil(8 * Math.random())
       if(evidence && evidence.length > 0) {
         setEvidence((prevEvidences: Evidence[]) => ([...prevEvidences, {
@@ -134,8 +149,8 @@ const EvidenceSection = () => {
             <EvidenceCard name='BLOOD STAINS' dangerType='EXTREME' imgUrl={Evidence1} evidenceId={1} />  
             <EvidenceCard name='KNIFE' dangerType='MODERATE' imgUrl={Evidence2} evidenceId={2} />  
             <EvidenceCard name='BULLET SHELLS' dangerType='EXTREME' imgUrl={Evidence3} evidenceId={3} />  
-            <EvidenceCard name='TISSUE WITH BLOOD' dangerType='LOW' imgUrl={Evidence4} evidenceId={4} />  
-            <EvidenceCard name='SWORD' dangerType='EXTREME' imgUrl={Evidence5} evidenceId={5} />  
+            <EvidenceCard name='FOOT PRINTS' dangerType='LOW' imgUrl={Evidence4} evidenceId={4} />  
+            <EvidenceCard name='BODY OUTLINE' dangerType='LOW' imgUrl={Evidence5} evidenceId={5} />  
         </EvidencesContainer>
 
 
