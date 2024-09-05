@@ -10,6 +10,9 @@ contract CrimeInvestigation {
 
     // @notice address of the oracle address
     address public oracleAddress;
+    IOracle.Message public message;
+    string public response;
+    IOracle.OpenAiRequest private config;
 
     struct CrimeScenes {
         address owner;
@@ -35,12 +38,6 @@ contract CrimeInvestigation {
         string imgUrl;
     }
 
-    struct ChatRun {
-        address owner;
-        IOracle.Message[] messages;
-        uint messagesCount;
-    }
-
     // @notice mappings
     mapping(uint256 => CrimeScenes) public scenes;
     mapping(uint256 => Characters) public character;
@@ -50,11 +47,6 @@ contract CrimeInvestigation {
     uint256 public numberOfCrimeScenes = 0;
     uint256 public numberOfCharacters = 0;
     uint256 public numberOfEvidences = 0;
-    string public gptReponse;
-    IOracle.Message public message;
-
-    // @notice Configuration for the OpenAI request
-    IOracle.OpenAiRequest private config;
 
     // events:
     event OracleAddressUpdated(address indexed newOracleAddress);
@@ -62,25 +54,24 @@ contract CrimeInvestigation {
     event CreateCrimeScene(address indexed ownerAddress, string title, string imgUrl);
     event CreateCharacter(address indexed ownerAddress, string name, string imgUrl);
     event CreateEvidence(address indexed ownerAddress, string name, string imgUrl);
-    event ChatCreated(address indexed owner, uint indexed chatId);
 
     constructor(address initialOracleAddress) {
         owner = msg.sender;
         oracleAddress = initialOracleAddress;
 
         config = IOracle.OpenAiRequest({
-            model : "gpt-4-turbo-preview",
+            model : "gpt-4-turbo", // gpt-4-turbo gpt-4o
             frequencyPenalty : 21, // > 20 for null
             logitBias : "", // empty str for null
-            maxTokens : 2000, // 0 for null
+            maxTokens : 1000, // 0 for null
             presencePenalty : 21, // > 20 for null
             responseFormat : "{\"type\":\"text\"}",
             seed : 0, // null
             stop : "", // null
             temperature : 10, // Example temperature (scaled up, 10 means 1.0), > 20 means null
             topP : 101, // Percentage 0-100, > 100 means null
-            tools : "[{\"type\":\"function\",\"function\":{\"name\":\"web_search\",\"description\":\"Search the internet\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Search query\"}},\"required\":[\"query\"]}}},{\"type\":\"function\",\"function\":{\"name\":\"code_interpreter\",\"description\":\"Evaluates python code in a sandbox environment. The environment resets on every execution. You must send the whole script every time and print your outputs. Script should be pure python code that can be evaluated. It should be in python format NOT markdown. The code should NOT be wrapped in backticks. All python packages including requests, matplotlib, scipy, numpy, pandas, etc are available. Output can only be read from stdout, and stdin. Do not use things like plot.show() as it will not work. print() any output and results so you can capture the output.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"code\":{\"type\":\"string\",\"description\":\"The pure python script to be evaluated. The contents will be in main.py. It should not be in markdown format.\"}},\"required\":[\"code\"]}}}]",
-            toolChoice : "auto", // "none" or "auto"
+            tools : "",
+            toolChoice : "", // "none" or "auto"
             user : "" // null
         });
     }
@@ -107,6 +98,8 @@ contract CrimeInvestigation {
     // @notice Last response received from the oracle
     string public lastResponse;
 
+    // @notice Counter for the number of calls made
+    uint private callsCount;
 
     // story board creation
     function createCrimeScene(string memory _title, string memory _desc, string memory _sceneUrl) public returns (bool) {
@@ -195,41 +188,11 @@ contract CrimeInvestigation {
         }
     }
 
-
-    // OpenAI-ChatGPT related functions:
-
     function sendMessage(string memory _message) public {
         message = createTextMessage("user", _message);
         IOracle(oracleAddress).createOpenAiLlmCall(0, config);
     }
 
-    // required for Oracle
-    function onOracleOpenAiLlmResponse(
-        uint /*runId*/,
-        IOracle.OpenAiResponse memory _response,
-        string memory _errorMessage
-    ) public {
-        require(msg.sender == oracleAddress, "Caller is not oracle");
-        if (bytes(_errorMessage).length > 0) {
-            gptReponse = _errorMessage;
-        } else {
-            gptReponse = _response.content;
-        }
-    }
-
-    // required for Oracle
-    function getMessageHistory(
-        uint /*_runId*/
-    ) public view returns (IOracle.Message[] memory) {
-        IOracle.Message[] memory messages = new IOracle.Message[](1);
-        messages[0] = message;
-        return messages;
-    }
-
-    // @notice Creates a text message with the given role and content
-    // @param role The role of the message
-    // @param content The content of the message
-    // @return The created message
     function createTextMessage(string memory role, string memory content) private pure returns (IOracle.Message memory) {
         IOracle.Message memory newMessage = IOracle.Message({
             role: role,
@@ -240,8 +203,27 @@ contract CrimeInvestigation {
         return newMessage;
     }
 
-    function getMessageResponse() public returns (string memory) {
-        return gptReponse;
+    function getMessageHistory(
+        uint /*_runId*/
+    ) public view returns (IOracle.Message[] memory) {
+        IOracle.Message[] memory messages = new IOracle.Message[](1);
+        messages[0] = message;
+        return messages;
     }
+
+
+    function onOracleOpenAiLlmResponse(
+        uint /*runId*/,
+        IOracle.OpenAiResponse memory _response,
+        string memory _errorMessage
+    ) public {
+        require(msg.sender == oracleAddress, "Caller is not oracle");
+        if (bytes(_errorMessage).length > 0) {
+            response = _errorMessage;
+        } else {
+            response = _response.content;
+        }
+    }
+
 
 }
