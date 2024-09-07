@@ -8,6 +8,9 @@ const CharacterImage = styled.img`
     width: 100%;
     height: 80%;
     object-fit: cover;
+    @media screen and (max-width: 1000px) {
+        height: 65%;
+    }
 `
 
 const CharacterCard = ({id, name, complexion, imgUrl, crimeRecords, noOfCrimes, onBail} : Character) => {

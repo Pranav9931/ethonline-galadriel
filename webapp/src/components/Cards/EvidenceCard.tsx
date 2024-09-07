@@ -12,6 +12,7 @@ type EvidenceType = {
 
 const EvidenceImage = styled.img`
     height: 200px;
+    object-fit: contain;
 `
 const EvidenceCard = ({evidenceId, name, dangerType, imgUrl}: EvidenceType) => {
 

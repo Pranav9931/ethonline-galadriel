@@ -29,6 +29,7 @@ const EvidencesContainer = styled.div`
     display: flex;
     gap: 20px;
     padding: 30px;
+    flex-wrap: wrap;
 `
 
 

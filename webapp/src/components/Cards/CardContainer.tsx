@@ -14,6 +14,9 @@ export const SceneCardContainer = styled.div`
     overflow: hidden;
     gap: 20px;
     cursor: pointer;
+    @media screen and (max-width: 600px) {
+      flex-wrap: wrap-reverse;
+    }
 `
 
 export const SceneCardContent = styled.div`
@@ -45,6 +48,7 @@ export const EvidenceCardContainer = styled.div`
   gap: 10px;
   transform: skew(-5deg);
   flex: 1;
+  // max-width: 210px;
 `
 
 export const CharacterCardContainer = styled.div`
@@ -61,4 +65,7 @@ export const CharacterCardContainer = styled.div`
 
 export const CharacterCardContent = styled.div`
   height: 700px;
+  @media screen and (max-width: 1000px) {
+    height: 500px;
+  }
 `
