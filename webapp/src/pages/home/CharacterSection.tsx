@@ -192,14 +192,14 @@ const CharacterSection = () => {
                   CREATE YOUR OWN CHARACTER
                 </Typography>
                 <Button autoFocus color="inherit" onClick={handleClose}>
-                  SELECT SCENE
+                  SELECT CHARACTER
                 </Button>
               </Toolbar>
             </AppBar>
             <CrimeSceneBody>
               <CrimeSceneImagePlaceholder ref={characterPlaceholderRef}>
                 {!isSet && !isLoading && <>
-                  <TextField label="FRAME PROMPT TO GENERATE CHARACTER IMAGE" variant="filled" color="success"
+                  {/* <TextField label="FRAME PROMPT TO GENERATE CHARACTER IMAGE" variant="filled" color="success"
                   autoComplete="off" focused
                     sx={{
                       '& .MuiInputBase-input': {
@@ -208,11 +208,17 @@ const CharacterSection = () => {
                       width: '800px'
                     }}
                     onChange={(e: any) => setCharacterPrompt(e.target.value)}
-                  />
+                  /> */}
 
-                  <Button color="success" sx={{marginLeft: '-100px'}} onClick={() => handleSubmit()}>
+                  {/* <Button color="success" sx={{marginLeft: '-100px'}} onClick={() => handleSubmit()}>
                     GENERATE
-                  </Button>
+                  </Button> */}
+                  <Box sx={{textAlign: 'center'}}>
+                    
+                    <Button sx={{background: '#FFFFFF', color: '#000000', padding: '10px 20px'}} fullWidth onClick={() => window.open('https://metahuman.unrealengine.com/', '_blank')}>
+                      <Typography sx={{fontFamily: 'var(--main-font)', fontSize: '24px'}}>OPEN META HUMAN CREATOR</Typography>
+                    </Button>
+                  </Box>
                 </>
                 }
 

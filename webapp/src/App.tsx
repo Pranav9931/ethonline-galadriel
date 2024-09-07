@@ -103,8 +103,8 @@ const App = () => {
     setOpen(true);
     setDialogOpen(false);
     try {
-      if (crimeScene && (evidence || character)){
-        let story: string = `CREATE A PLOT / STORY WITH CHARACTERIZATION, CRIME SCENE DETAILS ARE AS FOLLOWS: PLACE [${crimeScene.title.toUpperCase()}] DESCRIPTION [${crimeScene.desc.toUpperCase()}].`
+      if (crimeScene && (evidence && character)){
+        let story: string = `CREATE A BACKSTORY OF A CONVAI CHARACTER(of the convai ai character service) WITHIN 200 WORDS, CRIME SCENE DETAILS ARE AS FOLLOWS: PLACE [${crimeScene.title.toUpperCase()}] DESCRIPTION [${crimeScene.desc.toUpperCase()}].`
         if(evidence && evidence.length > 0) {
           const evidenceDesc: string = `FOUND EVIDENCES AT THE SCENE IS/ARE:${evidence.map((item: any) => (` [${item.name.toUpperCase()}]`))}`
           story = story + " " + evidenceDesc + ".";
@@ -113,7 +113,8 @@ const App = () => {
           const characterDesc: string = `CHARACTER OF THE STORY SHOULD BE AS FOLLOWS: NAME [${character.name.toUpperCase()}] COMPLEXION [${character.complexion?.toUpperCase()}] CRIME RECORDS [${character.crimeRecords?.toUpperCase()}] CASES [${character.noOfCrimes}] JUDICIAL BAIL STATUS [${String(character.onBail).toUpperCase()}]`
           story = story + " " + characterDesc + "."
         }
-  
+
+        story = story + "  " + `[${character.name.toUpperCase()}] WILL NOT ADMIT THEIR CRIME. [${character.name.toUpperCase()}] will only confess upon hearing the trigger word "Knife". "Knife" is the trigger word of [${character.name.toUpperCase()}]. They will deny everything until they hear it. They will confess everything when they hears the word "Knife". Importance on the word "Knife". this backstory is supposed to be used in a scenario where the player(is the detective) will question the character [${character.name.toUpperCase()}] and they will only confess their crime upon hearing the trigger word. structure the backstory to make sure that the backstory only mentions that the word "Knife" is the trigger word.`
         console.log(story)
         setFinalPrompt(story)
   
