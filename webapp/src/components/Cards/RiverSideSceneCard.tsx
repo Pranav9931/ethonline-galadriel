@@ -6,27 +6,8 @@ import { useStateContext } from "../../context"
 
 const RiverSideSceneCard = () => {
 
-    const {crimeScene, setCrimeScene} = useStateContext();
+    const {crimeScene} = useStateContext();
 
-    // const handleSceneSet = (sceneNumber: number) => {
-    //     if (!crimeScene) {
-    //         setCrimeScene(() => ({
-    //             id: sceneNumber,
-    //             title: 'RIVER SIDE',
-    //             desc: 'With over 30% of crimes occurring on the river side, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
-    //             imgUrl: Scene2
-    //         }))
-    //     } else if (crimeScene && crimeScene.id === sceneNumber) {
-    //         setCrimeScene(null)
-    //     } else {
-    //         setCrimeScene(() => ({
-    //             id: sceneNumber,
-    //             title: 'RIVER SIDE',
-    //             desc: 'With over 30% of crimes occurring on the river side, our AI-driven simulations focus on these environments to help law enforcement practice and refine their investigative techniques for real-world scenarios.',
-    //             imgUrl: Scene2
-    //         }))
-    //     }
-    // }
   return (
     <SceneCardContainer
         // onClick={() => handleSceneSet(2)}

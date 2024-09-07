@@ -6,7 +6,7 @@ import React, { useEffect } from "react"
 import { TransitionProps } from "@mui/material/transitions"
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CrimeScene, useStateContext } from "../../context"
+import { useStateContext } from "../../context"
 import { BrowserProvider } from "ethers"
 import { useWeb3ModalProvider } from "@web3modal/ethers/react"
 import { Contract } from "ethers"
@@ -107,7 +107,7 @@ const CrimeSceneSection = () => {
   const handleSceneSet = () => {
     if (sceneTitle.length > 0 && sceneDescription.length > 0 && generatedCrimeSceneLink.length > 0) {
       const getId: number = Math.ceil(6 * Math.random());
-      setCrimeScene((prev: CrimeScene) => ({
+      setCrimeScene(() => ({
         id: getId,
         title: sceneTitle,
         desc: sceneDescription,

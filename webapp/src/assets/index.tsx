@@ -15,7 +15,7 @@ import Evidence5 from "./evidence-05.png"
 import Character1 from "./character-01.png"
 import Character2 from "./character-02.png"
 import Character3 from "./character-03.png"
-import Character4 from "./character-04.png"
+// import Character4 from "./character-04.png"
 
 export {
     GridBackground,

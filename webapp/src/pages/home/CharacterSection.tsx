@@ -4,7 +4,7 @@ import { CharacterCard } from "../../components/Cards"
 import { Character1, Character2, Character3 } from "../../assets"
 import { AppBar, Box, Button, CircularProgress, Dialog, IconButton, Slide, TextField, Toolbar, Typography } from "@mui/material"
 import React, { useEffect } from "react"
-import { Character, useStateContext } from "../../context"
+import { useStateContext } from "../../context"
 import { useWeb3ModalProvider } from "@web3modal/ethers/react"
 import { BrowserProvider } from "ethers"
 import { Contract } from "ethers"
@@ -72,34 +72,13 @@ const CharacterSection = () => {
       const [generatedCharacterLink, setGeneratedCharacterLink] = React.useState("");
     
       const [hash, setHash] = React.useState("");
+
+      useEffect(() => {
+        setOnBail(true)
+        setHash("")
+        setCharacterPrompt("")
+      }, [])
     
-      const handleSubmit = async () => {
-    
-        if (characterPrompt.length === 0) return;
-        setIsLoading(true);
-        const ethersProvider = new BrowserProvider(walletProvider as any);
-        const signer = await ethersProvider.getSigner()
-    
-        const contractInstance = new Contract(contract, contractABI, signer)
-        const result = await contractInstance.initialiseImageGeneration(characterPrompt);
-    
-        setHash(result.hash)
-    
-        let lastResponse = await contractInstance.lastResponse();
-        console.log(lastResponse)
-        let newResponse = lastResponse;
-    
-        while(newResponse === lastResponse) {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          newResponse = await contractInstance.lastResponse();
-          console.log(".")
-        }
-    
-        console.log(newResponse)
-        setIsLoading(false)
-        setIsSet(true)
-        setGeneratedCharacterLink(newResponse);
-      }
     
       const handleClickOpen = () => {
         setOpen(true);
@@ -127,7 +106,7 @@ const CharacterSection = () => {
     
 
           const getId: number = Math.ceil(6 * Math.random());
-          setCharacter((prev: Character) => ({
+          setCharacter(() => ({
             id: getId,
             name: characterName,
             complexion: CharacterComplexion,

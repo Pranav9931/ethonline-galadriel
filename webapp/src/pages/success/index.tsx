@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { SuccessImg } from '../../assets'
 import MainText from '../../components/Typography'

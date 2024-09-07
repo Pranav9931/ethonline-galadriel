@@ -9,7 +9,6 @@ import React from 'react'
 import { BrowserProvider } from 'ethers'
 import { Contract } from 'ethers'
 import { TransitionProps } from '@mui/material/transitions'
-import SelectInput from '@mui/material/Select/SelectInput'
 
 
 const Transition = React.forwardRef(function Transition(
@@ -74,6 +73,7 @@ const EvidenceSection = () => {
       const result = await contractInstance.initialiseImageGeneration(`top down view of ` + evidencePrompt + ` solid black background`);
 
       setHash(result.hash)
+      console.log(hash)
 
       let lastResponse = await contractInstance.lastResponse();
       console.log(lastResponse)

@@ -6,7 +6,7 @@ import { useStateContext } from "../../context"
 
 const TheJungleSceneCard = () => {
 
-    const {crimeScene, setCrimeScene} = useStateContext();
+    const {crimeScene} = useStateContext();
   return (
     <SceneCardContainer
         // onClick={() => handleSceneSet(3)}

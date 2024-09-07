@@ -3,7 +3,7 @@ import { ImageWrapper, SceneCardContainer, SceneCardContent, SceneImage } from "
 import MainText from "../Typography"
 import { Scene1 } from "../../assets"
 import { useStateContext } from "../../context"
-import React from "react"
+import React, { useEffect } from "react"
 import { TransitionProps } from "@mui/material/transitions"
 import styled from "styled-components"
 
@@ -49,6 +49,12 @@ const BuildingSceneCard = () => {
         // console.log("Attempting to close dialog");
         setOpen(false);
     };
+
+    useEffect(() => {
+        if (noOfFloors && height && width && seed) {
+            // Do nothing
+        }
+    }, [])
 
     const handleSceneSet = (sceneNumber: number) => {
         if(!desc.length) return;

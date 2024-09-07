@@ -8,11 +8,10 @@ import MainText from './components/Typography'
 import { Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Typography } from '@mui/material'
 
 import contractABI from "./contracts/abi/index.json"
-import { BrowserProvider, recoverAddress } from 'ethers'
+import { BrowserProvider } from 'ethers'
 import { Contract } from 'ethers'
 import React, { useEffect, useState } from 'react'
 import { useWeb3ModalProvider } from '@web3modal/ethers/react'
-import { handleConvaiAPICall } from './apis'
 
 const Floater = styled.div`
   position: fixed;
@@ -82,7 +81,7 @@ const CharacterImage = styled.img`
 
 const App = () => {
 
-  const {contract, crimeScene, evidence, character, setCrimeScene, setEvidence, setCharacter, finalPrompt, setFinalPrompt} = useStateContext();
+  const {contract, crimeScene, evidence, character, setCrimeScene, setEvidence, setCharacter, setFinalPrompt} = useStateContext();
 
   const [scroll, setScroll] = React.useState<DialogProps['scroll']>('paper');
 
@@ -97,6 +96,14 @@ const App = () => {
 
   const [open, setOpen] = React.useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  useEffect(() => {
+      console.log(hash)
+  }, [hash])
+
+  useEffect(() => {
+    setScroll('paper')
+  }, [])
 
   const handleFinalSubmit = async () => {
     setIsLoading(true);
@@ -200,7 +207,7 @@ const App = () => {
         setOpen(false);
         setDialogOpen(false);
 
-        const promise = new Promise(resolve => setTimeout(resolve, 2000))
+        new Promise(resolve => setTimeout(resolve, 2000))
         navigate("../success")
       }
 
